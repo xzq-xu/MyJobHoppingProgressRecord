@@ -14,13 +14,11 @@
 
 ### **二、高效学习资源（直接点击学习）**
 #### **1. 视频教程（20分钟）**
-- [B站《10分钟搞懂JVM内存模型》](https://www.bilibili.com/video/BV1r4411A7Jq)（中文，动画图解）
-- [YouTube《JVM Memory Structure in 10 Minutes》](https://www.youtube.com/watch?v=450maTzSIvA)（英文，带字幕）
+- [【【java】jvm内存模型全面解析】](https://www.bilibili.com/video/BV12t411u726/?share_source=copy_web&vd_source=a1dd9eea0d9126db0cb5dbd916f5514e)（中文，动画图解）
+- [白话JVM内存结构，死也忘不了](https://www.bilibili.com/video/BV1Q64y1h7PT?spm_id_from=333.788.recommend_more_video.2&vd_source=0e9540a3b4e6ed455c3814157af345a7)
 
 #### **2. 文档资料（20分钟）**
 - [Oracle官方文档 - JVM内存结构](https://docs.oracle.com/javase/specs/jvms/se17/html/jvms-2.html#jvms-2.5)（精读第2.5节）
-- [快速图解：JVM内存分区](https://www.baeldung.com/java-memory-model-jvm)（图文对照）
-
 ---
 
 ### **三、核心知识点整理（15分钟）**
