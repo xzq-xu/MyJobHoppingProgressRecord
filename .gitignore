@@ -1,0 +1,8 @@
+*.class
+target/
+*.jar
+*.war
+*.ear
+*.zip
+*.tar
+*.gz
