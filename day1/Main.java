@@ -8,7 +8,7 @@ public class Main{
     //每个方法由自己的栈空间
     public void fun1(int a){
         int b = 10;
-        Person person = new Person();
+        Person p = new Person();
         p.id = 1;
         p.name = "asd";
         a = a + b;
