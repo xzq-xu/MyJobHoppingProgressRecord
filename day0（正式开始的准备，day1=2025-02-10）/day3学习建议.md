@@ -8,7 +8,7 @@
 
 2. **ConcurrentHashMap的技术细节**  
    - **视频推荐**: [ConcurrentHashMap的技术细节](https://www.bilibili.com/video/BV1ju4y1o7WA/)  
-   - **时长**: 约10分钟  
+   - **时长**: 约30分钟  
 
 2. **ConcurrentHashMap如何保证并发线程安全**  
    - **视频推荐**: [ConcurrentHashMap如何保证并发线程安全](https://www.bilibili.com/video/BV1rp4y1P7ci/)  
