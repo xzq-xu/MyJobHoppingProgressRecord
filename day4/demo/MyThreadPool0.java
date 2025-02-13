@@ -34,11 +34,18 @@ public class MyThreadPool0 {
                throw new RuntimeException(e);
             }
         }
-    });
+    },"唯一线程");
     
+    {
+        thread.start();
+    }
 
 
     public void execute(Runnable task){
-        blockingQueue.offer(task);
+        //offer 表示是否添加成功
+        boolean offer = blockingQueue.offer(task);
+        if (!offer) {
+            
+        }
     }
 }
