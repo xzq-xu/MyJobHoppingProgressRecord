@@ -28,19 +28,29 @@ public class MyThreadPool0 {
     //4、while(true) 十分浪费cpu资源，有没有一种容器可以在没有元素时可以阻塞获取呢？
 
     //6、需要一个容器存放多个线程，数量不确定，新增一个参数
-    int corePoolSize = 10;
+    private final int corePoolSize;
     //7.2 新开线程需要设置最大的新开数量，这里直接设置最大总线程数
-    int maximumPoolSize = 20;
-    List<Thread> coreList =  new ArrayList<>();
+    private final  int maximumPoolSize;
+    final List<Thread> coreList =  new ArrayList<>();
     //7.3 新开的线程存放在另一个容器中，表示为辅助线程、临时线程
-    List<Thread> supportList =  new ArrayList<>();
-    long timedOut = 1000L;
-    TimeUnit timeUnit  = TimeUnit.SECONDS;
+    final List<Thread> supportList =  new ArrayList<>();
+    private final  long timedOut;
+    private final  TimeUnit timeUnit;
 
 
     //5、目前是单个线程的线程池，为了让其他线程也能复用，抽取这个唯一线程的Runnable
 
     //7.5 非核心线程不应该一直阻塞，需要超时结束
+
+
+    //将可配置参数设定到构造方法中
+
+    public MyThreadPool0(int corePoolSize,int maximumPoolSize,long timedOut,TimeUnit timeUnit){
+        this.corePoolSize = corePoolSize;
+        this.maximumPoolSize = maximumPoolSize;
+        this.timeUnit = timeUnit;
+        this.timedOut = timedOut;
+    }
 
 
 
