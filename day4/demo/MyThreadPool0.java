@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 定义核心组件：任务队列、工作线程、线程池状态管理等。
@@ -26,6 +27,17 @@ public class MyThreadPool0 {
 
     //4、while(true) 十分浪费cpu资源，有没有一种容器可以在没有元素时可以阻塞获取呢？
 
+    //6、需要一个容器存放多个线程，数量不确定，新增一个参数
+    int corePoolSize = 10;
+    //7.2 新开线程需要设置最大的新开数量，这里直接设置最大总线程数
+    int maximumPoolSize = 20;
+    List<Thread> coreList =  new ArrayList<>();
+    //7.3 新开的线程存放在另一个容器中，表示为辅助线程、临时线程
+    List<Thread> supportList =  new ArrayList<>();
+    long timedOut = 1000L;
+    TimeUnit timeUnit  = TimeUnit.SECONDS;
+
+
     //5、目前是单个线程的线程池，为了让其他线程也能复用，抽取这个唯一线程的Runnable
     Runnable task = () -> {
         while (true) {
@@ -37,25 +49,52 @@ public class MyThreadPool0 {
             }
         }
     };
-
-    //6、需要一个容器存放多个线程，数量不确定，新增一个参数
-    int threadSize = 10;
-    List<Thread> threadList =  new ArrayList<>();
-
+    //7.5 非核心线程不应该一直阻塞，需要超时结束
+    Runnable supportTask = () -> {
+        while (true) {
+            try {
+                Runnable command =  blockingQueue.poll(timedOut,timeUnit);
+                if(command == null){
+                    //超时未获取到任务，则退出循环
+                    break;
+                }
+                command.run();
+            } catch (Exception e) {
+               throw new RuntimeException(e);
+            }
+        }
+        System.out.println("supportThread end");
+    };
 
 
     public void execute(Runnable task){
         //6.2 在提交任务的时候我们就需要判断线程数量是否达到设定值
-        if (threadList.size() < threadSize) {
+        if (coreList.size() < corePoolSize) {
             Thread thread = new Thread(task);
-            threadList.add(thread);
+            coreList.add(thread);
             thread.start();
         }
 
-        //offer 表示是否添加成功
-        boolean offer = blockingQueue.offer(task);
-        if (!offer) {
-            
+        if (blockingQueue.offer(task)) {
+            return;
         }
+
+        //6.3 线程数达到设定值，不需要再创建线程了，直接往阻塞队列放入任务    
+        //offer 返回是否添加成功
+   
+        //7、如果放入阻塞队列失败则表示，队列已满，此时考虑要新开线程
+        //7.4 如果线程数还没达到最大值，将创建新线程并放入supportList中
+        //注意这一步，需要保证线程安全这里省略
+        if (coreList.size() + supportList.size() < maximumPoolSize) {
+            Thread thread = new Thread(task);
+            supportList.add(thread);
+            thread.start();
+        }
+        //8、 创建完成辅助线程（临时线程）后再次将task放入blockingQueue
+        //如果再次出现放入失败，此时需要考虑拒绝任务
+        if (blockingQueue.offer(task)) {
+            return;
+        };
+        
     }
 }
