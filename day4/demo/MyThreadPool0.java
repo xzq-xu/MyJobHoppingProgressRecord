@@ -2,6 +2,8 @@ package day4.demo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * 定义核心组件：任务队列、工作线程、线程池状态管理等。
@@ -18,22 +20,25 @@ public class MyThreadPool0 {
     // 这样可以另起一个线程调度这个task了但是，这个线程无法复用
 
     //2、我需要一个容器来存放这个task，以便于调用
-    private List<Runnable> commandList = new ArrayList<>();
+    private BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(1024);
 
     //3、假设线程池只有一个线程，怎么让这个线程可以复用
     private Thread thread = new Thread(() -> {
+        //4、while(true) 十分浪费cpu资源，有没有一种容器可以在没有元素时可以阻塞获取呢？
+        //使用BlockingQueue
         while (true) {
-            if (!commandList.isEmpty()) {
-                Runnable command =  commandList.remove(0);
+            try {
+                Runnable command =  blockingQueue.take();
                 command.run();
+            } catch (Exception e) {
+               throw new RuntimeException(e);
             }
         }
     });
+    
 
 
     public void execute(Runnable task){
-        commandList.add(task);
-        
-        // new Thread(task).start();
+        blockingQueue.offer(task);
     }
 }
