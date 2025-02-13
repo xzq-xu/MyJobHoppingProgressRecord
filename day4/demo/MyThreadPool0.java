@@ -18,14 +18,22 @@ public class MyThreadPool0 {
     // 这样可以另起一个线程调度这个task了但是，这个线程无法复用
 
     //2、我需要一个容器来存放这个task，以便于调用
-    private List<Runnable> taskList = new ArrayList<>();
+    private List<Runnable> commandList = new ArrayList<>();
 
     //3、假设线程池只有一个线程，怎么让这个线程可以复用
-    
+    private Thread thread = new Thread(() -> {
+        while (true) {
+            if (!commandList.isEmpty()) {
+                Runnable command =  commandList.remove(0);
+                command.run();
+            }
+        }
+    });
+
 
     public void execute(Runnable task){
-        taskList.add(task);
-        taskList.forEach(e -> new Thread(e).start());
+        commandList.add(task);
+        
         // new Thread(task).start();
     }
 }
