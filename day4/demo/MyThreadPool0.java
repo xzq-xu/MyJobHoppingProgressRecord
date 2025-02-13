@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
+
+import javax.management.RuntimeErrorException;
 
 /**
  * 定义核心组件：任务队列、工作线程、线程池状态管理等。
@@ -21,7 +24,7 @@ public class MyThreadPool0 {
     // 这样可以另起一个线程调度这个task了但是，这个线程无法复用
 
     //2、我需要一个容器来存放这个task，以便于调用
-    private BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(1024);
+    private final BlockingQueue<Runnable> blockingQueue;
 
     //3、假设线程池只有一个线程，怎么让这个线程可以复用
 
@@ -36,6 +39,7 @@ public class MyThreadPool0 {
     final List<Thread> supportList =  new ArrayList<>();
     private final  long timedOut;
     private final  TimeUnit timeUnit;
+    private final RejectHandler rejectHandler;
 
 
     //5、目前是单个线程的线程池，为了让其他线程也能复用，抽取这个唯一线程的Runnable
@@ -45,11 +49,13 @@ public class MyThreadPool0 {
 
     //将可配置参数设定到构造方法中
 
-    public MyThreadPool0(int corePoolSize,int maximumPoolSize,long timedOut,TimeUnit timeUnit){
+    public MyThreadPool0(int corePoolSize,int maximumPoolSize, BlockingQueue<Runnable> blockingQueue,long timedOut,TimeUnit timeUnit,RejectHandler rejectHandler){
         this.corePoolSize = corePoolSize;
         this.maximumPoolSize = maximumPoolSize;
+        this.blockingQueue = blockingQueue;
         this.timeUnit = timeUnit;
         this.timedOut = timedOut;
+        this.rejectHandler = rejectHandler;
     }
 
 
@@ -79,11 +85,16 @@ public class MyThreadPool0 {
         }
         //8、 创建完成辅助线程（临时线程）后再次将task放入blockingQueue
         //如果再次出现放入失败，此时需要考虑拒绝任务
+        //定义一个拒绝策略接口来实现自定义的拒绝方式
+        //添加一个拒绝策略参数，接受拒绝策略
         if (blockingQueue.offer(task)) {
             return;
         };
+
+        rejectHandler.reject(task, this);
         
     }
+
 
     //将coreTask 和 supportTask封装为两个类
     class CoreThread extends Thread  {
@@ -122,5 +133,22 @@ public class MyThreadPool0 {
     }
 
 
+    //添加两个个默认的拒绝策略
+    public static class AbortPolicy  implements RejectHandler{
+
+        @Override
+        public void reject(Runnable task, MyThreadPool0 threadPool0) {
+            throw new RuntimeException("默认拒绝了");
+        }
+        
+    }
+    public static class DiscardPolicy  implements RejectHandler{
+
+        @Override
+        public void reject(Runnable task, MyThreadPool0 threadPool0) {
+            
+        }
+        
+    }
 
 }
