@@ -23,9 +23,11 @@ public class MyThreadPool0 {
     private BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(1024);
 
     //3、假设线程池只有一个线程，怎么让这个线程可以复用
-    private Thread thread = new Thread(() -> {
-        //4、while(true) 十分浪费cpu资源，有没有一种容器可以在没有元素时可以阻塞获取呢？
-        //使用BlockingQueue
+
+    //4、while(true) 十分浪费cpu资源，有没有一种容器可以在没有元素时可以阻塞获取呢？
+
+    //5、目前是单个线程的线程池，为了让其他线程也能复用，抽取这个唯一线程的Runnable
+    Runnable task = () -> {
         while (true) {
             try {
                 Runnable command =  blockingQueue.take();
@@ -34,14 +36,22 @@ public class MyThreadPool0 {
                throw new RuntimeException(e);
             }
         }
-    },"唯一线程");
-    
-    {
-        thread.start();
-    }
+    };
+
+    //6、需要一个容器存放多个线程，数量不确定，新增一个参数
+    int threadSize = 10;
+    List<Thread> threadList =  new ArrayList<>();
+
 
 
     public void execute(Runnable task){
+        //6.2 在提交任务的时候我们就需要判断线程数量是否达到设定值
+        if (threadList.size() < threadSize) {
+            Thread thread = new Thread(task);
+            threadList.add(thread);
+            thread.start();
+        }
+
         //offer 表示是否添加成功
         boolean offer = blockingQueue.offer(task);
         if (!offer) {
