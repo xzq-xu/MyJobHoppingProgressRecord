@@ -39,38 +39,15 @@ public class MyThreadPool0 {
 
 
     //5、目前是单个线程的线程池，为了让其他线程也能复用，抽取这个唯一线程的Runnable
-    Runnable task = () -> {
-        while (true) {
-            try {
-                Runnable command =  blockingQueue.take();
-                command.run();
-            } catch (Exception e) {
-               throw new RuntimeException(e);
-            }
-        }
-    };
+
     //7.5 非核心线程不应该一直阻塞，需要超时结束
-    Runnable supportTask = () -> {
-        while (true) {
-            try {
-                Runnable command =  blockingQueue.poll(timedOut,timeUnit);
-                if(command == null){
-                    //超时未获取到任务，则退出循环
-                    break;
-                }
-                command.run();
-            } catch (Exception e) {
-               throw new RuntimeException(e);
-            }
-        }
-        System.out.println("supportThread end");
-    };
+
 
 
     public void execute(Runnable task){
         //6.2 在提交任务的时候我们就需要判断线程数量是否达到设定值
         if (coreList.size() < corePoolSize) {
-            Thread thread = new Thread(task);
+            Thread thread = new CoreThread();
             coreList.add(thread);
             thread.start();
         }
@@ -86,7 +63,7 @@ public class MyThreadPool0 {
         //7.4 如果线程数还没达到最大值，将创建新线程并放入supportList中
         //注意这一步，需要保证线程安全这里省略
         if (coreList.size() + supportList.size() < maximumPoolSize) {
-            Thread thread = new Thread(task);
+            Thread thread = new SupportThread();
             supportList.add(thread);
             thread.start();
         }
@@ -97,4 +74,43 @@ public class MyThreadPool0 {
         };
         
     }
+
+    //将coreTask 和 supportTask封装为两个类
+    class CoreThread extends Thread  {
+        
+        @Override
+        public void run(){
+            while (true) {
+                try {
+                    Runnable command =  blockingQueue.take();
+                    command.run();
+                } catch (Exception e) {
+                   throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    class SupportThread extends Thread  {
+        
+        @Override
+        public void run(){
+            while (true) {
+                try {
+                    Runnable command =  blockingQueue.poll(timedOut,timeUnit);
+                    if(command == null){
+                        //超时未获取到任务，则退出循环
+                        break;
+                    }
+                    command.run();
+                } catch (Exception e) {
+                   throw new RuntimeException(e);
+                }
+            }
+            System.out.println("supportThread end");
+        }
+    }
+
+
+
 }
