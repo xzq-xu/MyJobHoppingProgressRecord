@@ -12,19 +12,19 @@
 
 1. **Spring IOC 核心原理与 Bean 生命周期解析**  
    - **视频推荐**: 
-        - [Spring IOC 容器原理解析](https://www.bilibili.com/video/BV1sk4y1P7UM)  
-        - [Spring Bean 生命周期详解](https://www.bilibili.com/video/BV1Py4y1a7zg)
-        - [Spring 循环依赖解决方案](https://www.bilibili.com/video/BV11arfYnEw9)
+        - [Java后端，每周一个编程技巧，积累自己的知识库！什么是IOC容器？结合实例说明](https://www.bilibili.com/video/BV1Bm411y7CB/)  
+        - [Spring Bean 生命周期详解](https://www.bilibili.com/video/BV1L14y1S7cf/)
+        - [Spring 循环依赖解决方案](https://www.bilibili.com/video/BV1Uy421z7Xe/)
    - **时长**: 30分钟  
 
 2. **三级缓存与循环依赖的实现**  
    - **视频推荐**: 
-        - [Spring 三级缓存原理解析](https://www.bilibili.com/video/BV1mD4y1E7yX)    
+        - [Spring 三级缓存原理解析](https://www.bilibili.com/video/BV1AJ4m157MU/)    
    - **时长**: 15分钟  
 
 3. **手绘三级缓存流程图**  
    - **视频推荐**: 
-        - [手绘 Spring 三级缓存流程图](https://www.bilibili.com/video/BV1C3411S7c7/)  
+        - [手绘 Spring 三级缓存流程图](https://www.bilibili.com/video/BV1D14y1P7dU/)  
    - **时长**: 15分钟  
 
 ---
@@ -32,15 +32,15 @@
 #### **第二阶段：文档资料补充（约20分钟）**
 
 1. **Bean 生命周期深度解析**  
-   - **资料来源**: [《Spring Bean 生命周期详解》](https://blog.csdn.net/Java_Yangxiaoyuan/article/details/123456789)  
+   - **资料来源**: [谈谈 Spring 中 Bean 的生命周期](https://cloud.tencent.com/developer/article/2429391)  
    - **学习目标**: 结合源码分析 Bean 的生命周期，如 `BeanDefinition` 的加载、`BeanFactoryPostProcessor` 和 `BeanPostProcessor` 的执行顺序。
 
 2. **三级缓存源码对比**  
-   - **资料来源**: [《Spring 三级缓存源码解析》](https://blog.csdn.net/weixin_43212356/article/details/98765432)  
+   - **资料来源**: [深度解析 Spring 源码：三级缓存机制探究](https://blog.csdn.net/qq_51601665/article/details/138006834)  
    - **学习目标**: 对比三级缓存的实现逻辑，例如 `singletonObjects`、`earlySingletonObjects` 和 `singletonFactories` 的作用。
 
 3. **循环依赖解决方案**  
-   - **资料来源**: [《Spring 循环依赖解决方案》](https://blog.csdn.net/qq_35423154/article/details/112233445)  
+   - **资料来源**: [Spring 循环依赖](https://blog.csdn.net/m0_74823963/article/details/144774149)  
    - **学习目标**: 掌握 Spring 如何通过三级缓存解决循环依赖问题，并理解其局限性。
 
 ---

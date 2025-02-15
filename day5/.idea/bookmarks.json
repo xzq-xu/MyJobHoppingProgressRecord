@@ -1,0 +1,112 @@
+{
+  "day5": [
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/DefaultListableBeanFactory.java",
+      "linenumber": 813,
+      "name": "public void preInstantiateSingletons() throws BeansException {",
+      "bookmarkType": "DIGIT_1"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/AbstractAutowireCapableBeanFactory.java",
+      "linenumber": 514,
+      "name": "doCreateBean",
+      "bookmarkType": "DIGIT_2"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/AbstractAutowireCapableBeanFactory.java",
+      "linenumber": 591,
+      "name": "createBean方法中首先创建了空的实例对象然后调用populateBean方法完成属性填充",
+      "bookmarkType": "LETTER_F"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/AbstractAutowireCapableBeanFactory.java",
+      "linenumber": 1424,
+      "name": "填充属性",
+      "bookmarkType": "DIGIT_4"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-context/5.1.14.RELEASE/spring-context-5.1.14.RELEASE-sources.jar!/org/springframework/context/support/AbstractApplicationContext.java",
+      "linenumber": 517,
+      "name": "执行refresh方法",
+      "bookmarkType": "LETTER_A"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-context/5.1.14.RELEASE/spring-context-5.1.14.RELEASE-sources.jar!/org/springframework/context/support/AbstractApplicationContext.java",
+      "linenumber": 548,
+      "name": "执行finishBeanFactoryInitialization 方法",
+      "bookmarkType": "LETTER_B"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-context/5.1.14.RELEASE/spring-context-5.1.14.RELEASE-sources.jar!/org/springframework/context/support/AbstractApplicationContext.java",
+      "linenumber": 876,
+      "name": "执行preInstantiateSingletons 创建所有singleton对象",
+      "bookmarkType": "LETTER_C"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/DefaultListableBeanFactory.java",
+      "linenumber": 824,
+      "name": "判断Bean是否为FactoryBean",
+      "bookmarkType": "LETTER_D"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/DefaultListableBeanFactory.java",
+      "linenumber": 846,
+      "name": "调用getBean【doGetBean】方法获取 bean对象",
+      "bookmarkType": "LETTER_Z"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/AbstractBeanFactory.java",
+      "linenumber": 317,
+      "name": "getBean中判断是singleton之后执行了getSingleton方法",
+      "bookmarkType": "LETTER_E"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/AbstractAutowireCapableBeanFactory.java",
+      "linenumber": 585,
+      "name": "在调用populateBean方法之前，因为当前处于singletonBean的创建状态中所以会将 “（） -\u003e getEarlyBeanReference” \u003cbr\u003e这一 singletonFactory 加入到 singletonFactories缓存（即三级缓存）中，同时会确保一级和二级缓存中没有该bean",
+      "bookmarkType": "LETTER_Y"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/AbstractAutowireCapableBeanFactory.java",
+      "linenumber": 1673,
+      "name": "populateBean方法填充定义自Definition（即配置）中的属性，其中调用BeanDefinitionValueResolver的resolveValueIfNecessary方法处理对容器中其他对象的引用",
+      "bookmarkType": "LETTER_G"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/BeanDefinitionValueResolver.java",
+      "linenumber": 109,
+      "name": "    --\u003e H[调用resolveReference方法处理对其他Bean的依赖] ",
+      "bookmarkType": "LETTER_H"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/BeanDefinitionValueResolver.java",
+      "linenumber": 302,
+      "name": "调用beanFactory的getBean方法获取属性值",
+      "bookmarkType": "LETTER_I"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/AbstractBeanFactory.java",
+      "linenumber": 245,
+      "name": "此次在doGetBean中调用单参数的getSingleton方法 （前两次也会调用但是获取不到值，所以省略了）",
+      "bookmarkType": "LETTER_O"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/DefaultSingletonBeanRegistry.java",
+      "linenumber": 181,
+      "name": "从singletonFactories（三级缓存）中获取 “（） -\u003e getEarlyBeanReference” singletonFactory",
+      "bookmarkType": "LETTER_Q"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/DefaultSingletonBeanRegistry.java",
+      "linenumber": 176,
+      "name": "单参数getSingleton方法先尝试从singletonObjects、earlySingletonObjects中获取对象a",
+      "bookmarkType": "LETTER_P"
+    },
+    {
+      "fileDescriptor": "/Users/xzq.xu/.m2/repository/org/springframework/spring-beans/5.1.14.RELEASE/spring-beans-5.1.14.RELEASE-sources.jar!/org/springframework/beans/factory/support/AbstractAutowireCapableBeanFactory.java",
+      "linenumber": 592,
+      "name": "对象a的属性填充完成后调用initializeBean方法：完成初始化操作，完成对象a的创建",
+      "bookmarkType": "LETTER_S"
+    }
+  ]
+}
