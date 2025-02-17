@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import site.xzq_xu.beans.BeansException;
 import site.xzq_xu.beans.factory.PropertyValue;
 import site.xzq_xu.beans.factory.config.BeanDefinition;
+import site.xzq_xu.beans.factory.config.BeanReference;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -55,6 +56,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFact
             for (PropertyValue propertyValue : beanDefinition.getPropertyValues().getPropertyValues()) {
                 String name = propertyValue.getName();
                 Object value = propertyValue.getValue();
+                if (value instanceof BeanReference beanReference) {
+                    //如果属性值为BeanReference，则先去实例化BeanReference所引用的Bean
+                    value = getBean(beanReference.getBeanName());
+                }
                 //通过反射设置属性值
                 BeanUtil.setProperty(bean, name, value);
             }

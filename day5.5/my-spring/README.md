@@ -76,6 +76,41 @@ Bean容器实现BeanDefinitionRegistry和SingletonBeanRegistry接口，向Bean�
 
 
 
+## Bean的依赖注入，（高级版属性填充，为bean的属性填充bean）
+
+> 分支名： inject-bean-with-dependencies
+
+在上一部分实现了实例化Bean时对Bean的一般属性进行填充，这一部分需要实现填充Bean的属性值为另一个bean的情况
+这里引入一个BeanReference，
+包装对于另一个Bean的引用，实例化beanA后填充属性时，
+若PropertyValue#value为BeanReference，引用beanB，则先去实例化beanB。
+为了降低代码复杂度，这里不考虑循环依赖的情况
+```java
+
+ protected void applyPropertyValues(String beanName, Object bean,BeanDefinition beanDefinition) {
+    try {
+        //遍历beanDefinition中的属性值
+        for (PropertyValue propertyValue : beanDefinition.getPropertyValues().getPropertyValues()) {
+            String name = propertyValue.getName();
+            Object value = propertyValue.getValue();
+            if (value instanceof BeanReference beanReference) {
+                //如果属性值为BeanReference，则先去实例化BeanReference所引用的Bean
+                value = getBean(beanReference.getBeanName());
+            }
+            //通过反射设置属性值
+            BeanUtil.setProperty(bean, name, value);
+        }
+    } catch (Exception e) {
+        //抛出异常
+        throw new BeansException("属性填充失败,Bean:"+beanName, e);
+    }
+}
+
+```
+
+
+
+[测试代码](./src/test/java/site/xzq_xu/test/ioc/InjectBeanWithDependenciesTest.java)
 
 
 
