@@ -1,4 +1,4 @@
-package site.xzq_xu.test.ioc;
+package site.xzq_xu.test.ioc.service;
 
 
 public class BeanFactoryTestService {

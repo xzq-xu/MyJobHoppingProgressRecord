@@ -59,6 +59,22 @@ Bean容器实现BeanDefinitionRegistry和SingletonBeanRegistry接口，向Bean�
 
 
 
+## Bean的属性填充
+
+> 分支名： populate-bean-with-property-values
+
+目前Definition中只有Bean的class信息，这里增加Bean的属性信息，在实例化Bean之后为Bean填充属性
+- PropertyValue：保存Bean的属性信息
+- PropertyValues: 保存Bean的多个属性信息
+- AbstractAutowireCapableBeanFactory.applyPropertyValues：填充Bean的属性
+
+#### 思考：为什么采用PropertyValues，而不是直接使用List<PropertyValue>
+
+
+
+[测试代码](./src/test/java/site/xzq_xu/test/ioc/PopulateBeanWithPropertyValuesTest.java)
+
+
 
 
 

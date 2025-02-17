@@ -3,6 +3,7 @@ package site.xzq_xu.test.ioc;
 import org.junit.jupiter.api.Test;
 import site.xzq_xu.beans.factory.config.BeanDefinition;
 import site.xzq_xu.beans.factory.support.DefaultListableBeanFactory;
+import site.xzq_xu.test.ioc.service.BeanFactoryTestService;
 
 /**
  * @Description: BeanDefinition和BeanDefinitionRegistry测试类
