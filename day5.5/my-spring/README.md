@@ -131,6 +131,8 @@ Bean容器实现BeanDefinitionRegistry和SingletonBeanRegistry接口，向Bean�
 - ResourceLoader：资源加载器接口，定义了加载资源的方法
   - DefaultResourceLoader：资源加载器的默认实现，根据资源路径的前缀选择不同的资源加载方式
 
+![img.png](img/resource-and-resource-loader.png)
+
 
 [测试代码](./src/test/java/site/xzq_xu/test/ioc/ResourceAndResourceLoaderTest.java)
 
