@@ -3,8 +3,6 @@ package site.xzq_xu.beans.factory.support;
 import site.xzq_xu.beans.BeansException;
 import site.xzq_xu.beans.factory.config.BeanDefinition;
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * 实现了自动装配功能的Bean容器
  */
@@ -45,7 +43,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFact
      * @return
      */
     private  Object createBeanInstance(BeanDefinition beanDefinition)  {
-        return instantiationStrategy.instantiate(beanDefinition);
+        return getInstantiationStrategy().instantiate(beanDefinition);
     }
 
 
