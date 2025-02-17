@@ -85,3 +85,6 @@ src/
 - stereotype: 提供注解类，用于标记 Spring 组件。
 - test: 包含单元测试和集成测试，覆盖 AOP、IoC、事件机制等功能。
 
+
+
+**使用lombok简化代码**
