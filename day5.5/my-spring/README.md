@@ -114,3 +114,23 @@ Bean容器实现BeanDefinitionRegistry和SingletonBeanRegistry接口，向Bean�
 
 
 
+
+
+
+
+## 资源和资源加载器
+
+> 分支名： resource-and-resource-loader 
+
+此前对于bean的加载，都是通过硬编码的方式，这里引入资源类Resource，资源加载器ResourceLoader，为后续从配置文件加载Bean提供基础
+
+- Resource：资源接口，定义了获取资源文件的方式
+  - ClassPathResource：从类路径下加载资源
+  - FileSystemResource：从文件系统加载资源
+  - UrlResource：从URL加载资源
+- ResourceLoader：资源加载器接口，定义了加载资源的方法
+  - DefaultResourceLoader：资源加载器的默认实现，根据资源路径的前缀选择不同的资源加载方式
+
+
+[测试代码](./src/test/java/site/xzq_xu/test/ioc/ResourceAndResourceLoaderTest.java)
+
