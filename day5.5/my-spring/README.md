@@ -23,6 +23,8 @@ public class BeanFactory {
 
 ## BeanDefinition和BeanDefinitionRegistry
 
+> 分支名： bean-definition-and-bean-definition-register（创建时打错字了） 
+
 主要增加这些类：
 - BeanDefinition：bean的定义信息，包含bean的class信息，构造参数、属性值等信息，每个bean对应一个BeanDefinition的实例（单例bean）。简化版本仅包含class信息
 - BeanDefinitionRegistry：注册beanDefinition的接口，定义注册BeanDefinition的方法
