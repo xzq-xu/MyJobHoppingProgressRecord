@@ -34,5 +34,9 @@ public class BeanFactory {
 Bean容器实现BeanDefinitionRegistry和SingletonBeanRegistry接口，向Bean容器重注册BeanDefinition之后，使用Bean时才会实例化
 ![img.png](img/BeanDefinition和BeanDefinitionRegistry.png)
 
+[测试代码](./src/test/java/site/xzq_xu/test/ioc/BeanDefinitionAndBeanDefinitionRegistryTest.java)
+
+
+
 
 
