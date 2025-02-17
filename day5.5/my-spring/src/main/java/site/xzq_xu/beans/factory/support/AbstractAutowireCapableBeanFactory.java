@@ -75,7 +75,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFact
      * @return
      */
     private  Object createBeanInstance(BeanDefinition beanDefinition)  {
-        return instantiationStrategy.instantiate(beanDefinition);
+        return getInstantiationStrategy().instantiate(beanDefinition);
     }
 
 
