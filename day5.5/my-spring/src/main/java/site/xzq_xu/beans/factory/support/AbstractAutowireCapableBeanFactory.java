@@ -11,6 +11,12 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFactory {
 
 
+    /**
+     * 实例化策略添加实例化策略
+     */
+    private InstantiationStrategy instantiationStrategy = new SimpleInstantiationStrategy();
+
+
     @Override
     protected Object createBean(String name, BeanDefinition beanDefinition) {
         // 调用doCreateBean方法创建Bean实例
@@ -19,12 +25,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFact
 
     protected Object doCreateBean(String name, BeanDefinition beanDefinition) {
 
-        // 获取Bean的Class对象
-        Class beanClass = beanDefinition.getBeanClass();
         Object bean = null;
         try {
-            // 通过反射创建Bean实例
-            bean = beanClass.getDeclaredConstructor().newInstance();
+            // 根据实例化策略实例化Bean
+            bean = createBeanInstance(beanDefinition);
         } catch (Exception e) {
             // 抛出异常
             throw new BeansException("实例化失败", e);
@@ -34,6 +38,25 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFact
         addSingleton(name, bean);
         return bean;
     }
+
+    /**
+     * 从BeanDefinition使用InstantiationStrategy创建Bean实例
+     * @param beanDefinition
+     * @return
+     */
+    private  Object createBeanInstance(BeanDefinition beanDefinition)  {
+        return instantiationStrategy.instantiate(beanDefinition);
+    }
+
+
+    public InstantiationStrategy getInstantiationStrategy() {
+        return instantiationStrategy;
+    }
+
+    public void setInstantiationStrategy(InstantiationStrategy instantiationStrategy) {
+        this.instantiationStrategy = instantiationStrategy;
+    }
+
 
 
 }

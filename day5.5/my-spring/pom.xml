@@ -29,6 +29,19 @@
             <version>1.18.36</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
+        <dependency>    <!--添加 byte-buddy 依赖 操作字节码-->
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.17.1</version>
+        </dependency>
+
     </dependencies>
 
 </project>

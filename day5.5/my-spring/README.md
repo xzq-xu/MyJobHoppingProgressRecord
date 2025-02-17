@@ -37,6 +37,29 @@ Bean容器实现BeanDefinitionRegistry和SingletonBeanRegistry接口，向Bean�
 [测试代码](./src/test/java/site/xzq_xu/test/ioc/BeanDefinitionAndBeanDefinitionRegistryTest.java)
 
 
+## Bean实例化策略InstantiationStrategy
+
+> 分支名: instantiation-strategy
+
+目前的Bean创建是通过 AbstractAutowireCapableBeanFactory.doCreateBean的方法，
+其中主要使用了 ` beanClass.getDeclaredConstructor().newInstance();`调用了无参构造器实例化Bean，
+仅使用于Bean存在无参构造器的情形。
+所以，针对实例化Bean的方式，抽象出一个实例化策略接口InstantiationStrategy，给出三个实现类：
+- SimpleInstantiationStrategy，使用bean的构造方法来实例化
+- CglibSubclassingInstantiationStrategy，使用CGLIB动态生成子类 ,在JDK9及以后的JDK中需要添加JVM参数 --add-opens java.base/java.lang=ALL-UNNAMED ，否则运行会报错
+- ByteBuddySubClassingInstantiationStrategy，使用ByteBuddy动态生成子类，主要解决使用JDK9引入模块化系统以后，不允许外部模块方法反射访问
+
+
+![img_1.png](img/InstantiationStrategy.png)
+
+
+[测试代码](./src/test/java/site/xzq_xu/test/ioc/InstantiationStrategyTest.java)
+![img.png](img/InstantiationStrategyTest运行结果.png)
+
+
+
+
+
 
 
 
