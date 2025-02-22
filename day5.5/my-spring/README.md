@@ -168,4 +168,30 @@ AbstractBeanDefinitionReader，实现BeanDefinitionReader接口，拥有两个�
 
 
 
+## BeanFactoryPostProcessor 和 BeanPostProcessor
+
+> 分支名： bean-factory-post-processor-and-bean-post-processor
+
+- BeanFactoryPostProcessor和BeanPostProcessor是spring框架中具有重量级地位的两个接口，理解了这两个接口的作用，基本就理解spring的核心原理了。
+- BeanFactoryPostProcessor：BeanFactory的后置处理器，在BeanFactory初始化完成后，Bean实例化之前，可以对BeanFactory进行修改，比如修改BeanDefinition的属性
+- BeanPostProcessor：Bean的后置处理器，在Bean实例化之后，初始化之前，可以对Bean进行修改，比如修改Bean的属性；
+
+BeanFactoryPostProcessor和BeanPostProcessor的区别在于，BeanFactoryPostProcessor是在BeanFactory初始化完成后，Bean实例化之前，对BeanFactory进行修改， BeanPostProcessor是在Bean实例化之后，初始化之前，对Bean进行修改。
+BeanPostProcessor也是后面实现AOP的关键，BeanPostProcessor的两个方法分别在bean执行初始化方法（后面实现）之前和之后执行
+
+
+
+[测试代码](！！！)
+
+
+
+
+
+
+
+
+
+
+
+
 
