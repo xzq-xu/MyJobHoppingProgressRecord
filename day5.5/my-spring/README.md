@@ -136,3 +136,36 @@ Bean容器实现BeanDefinitionRegistry和SingletonBeanRegistry接口，向Bean�
 
 [测试代码](./src/test/java/site/xzq_xu/test/ioc/ResourceAndResourceLoaderTest.java)
 
+
+
+
+## 在文件中定义BeanDefinition（以xml和Json为例，也可以在实现其他类型）
+
+> 分支名： define-bean-definition-in-file
+
+在这之前有了资源的描述和资源加载器，就可以在配置文件中声明式的定义BeanDefinition或者说Bean的信息，资源加载器读取配置文件（json、xml），
+解析bean的信息，然后向容器中注册BeanDefinition
+
+定义一个BeanDefinitionReader接口，用来读取Bean的定义信息
+BeanDefinitionReader的实现类需要有获取资源的能力，且读取完bean的定义信息后需要将其（BeanDefinition）注册到容器所以定义一个抽象实现类
+AbstractBeanDefinitionReader，实现BeanDefinitionReader接口，拥有两个属性 ResourceLoader和 BeanDefinitionRegister，分别用来加载资源，注册BeanDefinition
+
+实现两个实现类：
+- XmlBeanDefinitionReader：读取xml文件，解析bean的定义信息，注册到容器
+- JsonBeanDefinitionReader：读取json文件，解析bean的定义信息，注册到容器
+
+因为读取文件获取都是String类型，所以这里先只是实现String类型的属性和Reference属性，后续可以扩展为其他类型
+
+同时调整一下BeanFactory的层级，以尽可能和Spring中的BeanFactory保持一致
+
+
+![img.png](img/BeanFactory的层级.png)
+
+
+
+[测试代码](src/test/java/site/xzq_xu/test/ioc/FIleBeanDefinitionTest.java)
+
+
+
+
+

@@ -3,11 +3,12 @@ package site.xzq_xu.beans.factory.support;
 import site.xzq_xu.beans.factory.BeanFactory;
 import site.xzq_xu.beans.BeansException;
 import site.xzq_xu.beans.factory.config.BeanDefinition;
+import site.xzq_xu.beans.factory.config.ConfigurableBeanFactory;
 
 /**
  * 一个实现单例bean注册和获取的Bean容器
  */
-public abstract class AbstactBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory {
+public abstract class AbstactBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
     @Override
     public Object getBean(String name) throws BeansException {
         // 从单例池中获取bean

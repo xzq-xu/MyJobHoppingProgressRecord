@@ -3,6 +3,7 @@ package site.xzq_xu.beans.factory.support;
 import cn.hutool.core.bean.BeanUtil;
 import site.xzq_xu.beans.BeansException;
 import site.xzq_xu.beans.factory.PropertyValue;
+import site.xzq_xu.beans.factory.config.AutowireCapableBeanFactory;
 import site.xzq_xu.beans.factory.config.BeanDefinition;
 import site.xzq_xu.beans.factory.config.BeanReference;
 
@@ -11,7 +12,8 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * 实现了自动装配功能的Bean容器
  */
-public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFactory {
+public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFactory
+                                        implements AutowireCapableBeanFactory {
 
 
     /**
