@@ -8,3 +8,6 @@ target/
 *.gz
 .idea/*
 .idea
+.mvn
+mvnw
+mvnw.*

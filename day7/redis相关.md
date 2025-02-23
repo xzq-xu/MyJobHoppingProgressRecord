@@ -104,3 +104,39 @@ flowchart TD
     ITERATE_HASH_FUNCTION_LIST --> END
 
 ```
+
+
+
+
+## 场景题
+
+### 给你一亿个Rediskeys统计双方的共同好友
+
+解决思路：
+使用set存储这些key，将用户id作为key，将他的好友作为value进行存储；
+使用交集操作获取共同好友； -----   SINTERSTORE userid:new userid:20002 userid:20003
+> 注意点： 一亿个数据不建议直接放在redis中， 可以使用 数据库分库分表、或者neo4j（图数据库）、HBase+Hadoop
+
+### 如何防止重复下单
+
+![下单流程示意图](下单流程示意图.png)
+
+在用户步骤1下单时候，可能会存在多次点击、网络问题等导致的多次提交，需要防止重复生产订单
+
+解决思路：
+1. 前端按钮置灰（防君子不防小人）
+2. 使用redis的setnx（setIfAbsent）执行，不存在则插入返回true，存在则返回false，来保证不会重复创建订单
+   可以使用 用户token+商品URL+keyword（存在多种操作都需要不重复时，用recommit表示重复提交的keyword）作为key，防止重复提交
+   注意给key设置过期时间。
+
+
+
+
+
+
+
+
+
+
+
+
