@@ -184,6 +184,33 @@ BeanPostProcessor也是后面实现AOP的关键，BeanPostProcessor的两个方�
 [测试代码](src/test/java/site/xzq_xu/test/ioc/BeanFactoryPostProcessorAndBeanPostProcessorTest.java)
 
 
+## 应用程序上下文 applicationContext
+
+> 分支名：application-context
+
+应用程序上下文`ApplicationContext`是Spring中之于`BeanFactory`更加先进的IOC容器，它出了支持`BeanFactory`的所有功能之外，
+还支持特殊类型bean如`BeanFactoryPostProcessor`和`BeanPostProcessor`的
+自动识别、资源加载、容器事件和监听器、国际化支持、单例bean自动初始化等。
+
+`BeanFactory`是Spring的基础设施，面向Spring本身；
+`ApplicationContext`是面向使用Spring的开发者，几乎所有的应用场合都可以直接使用`ApplicationContext`而不是底层的`BeanFactory`。
+
+
+bean目前的生命周期
+```mermaid
+graph TD
+    A[配置文件（xml、json或者其他）] --> B[读取为BeanDefinition] --> C[BeanFactoryPostProcessor 修改BeanDefinition]
+    --> D[Bean的实例化] --> E[BeanPostProcessor 前置处理]  --> F[Bean的初始化] 
+    --> G[BeanPostProcessor 后置处理] --> H[Bean的使用] --> I[Bean的销毁]
+```
+
+ApplicationContext层次图
+![ApplicationContext层次图](img/ApplicationContext层次图.png)
+
+
+
+[测试代码](src/test/java/site/xzq_xu/test/ioc/ApplicationContextTest.java)
+
 
 
 

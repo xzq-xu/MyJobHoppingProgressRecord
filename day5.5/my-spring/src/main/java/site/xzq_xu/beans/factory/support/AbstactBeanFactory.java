@@ -33,6 +33,11 @@ public abstract class AbstactBeanFactory extends DefaultSingletonBeanRegistry im
 
     }
 
+    @Override
+    public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
+        return (T)getBean(name);
+    }
+
     // 获取bean定义
     protected abstract BeanDefinition getBeanDefinition(String name);
 
