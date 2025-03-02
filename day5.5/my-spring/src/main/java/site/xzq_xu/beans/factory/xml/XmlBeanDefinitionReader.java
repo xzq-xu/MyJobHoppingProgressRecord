@@ -6,7 +6,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import site.xzq_xu.beans.BeansException;
-import site.xzq_xu.beans.factory.PropertyValue;
+import site.xzq_xu.beans.PropertyValue;
 import site.xzq_xu.beans.factory.config.BeanDefinition;
 import site.xzq_xu.beans.factory.config.BeanReference;
 import site.xzq_xu.beans.factory.support.AbstractBeanDefinitionReader;

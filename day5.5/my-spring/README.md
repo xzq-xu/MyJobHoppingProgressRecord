@@ -181,7 +181,7 @@ BeanPostProcessor也是后面实现AOP的关键，BeanPostProcessor的两个方�
 
 
 
-[测试代码](！！！)
+[测试代码](src/test/java/site/xzq_xu/test/ioc/BeanFactoryPostProcessorAndBeanPostProcessorTest.java)
 
 
 

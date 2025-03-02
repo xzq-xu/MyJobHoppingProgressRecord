@@ -1,9 +1,8 @@
 package site.xzq_xu.beans.factory.config;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import site.xzq_xu.beans.factory.PropertyValues;
+import site.xzq_xu.beans.PropertyValues;
 
 /**
  * BeanDefinition实例保存bean的信息，包括class类型、方法构造参数、是否为单例等.

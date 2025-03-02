@@ -16,7 +16,6 @@ import java.util.Set;
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
         implements ConfigurableListableBeanFactory,BeanDefinitionRegistry{
 
-
     // 定义一个Map，用于存储BeanDefinition
     private Map<String, BeanDefinition> beanDefinitionMap = new HashMap<>();
 
@@ -74,5 +73,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     public String[] getBeanDefinitionNames() {
         Set<String> beanNames = beanDefinitionMap.keySet();
         return beanNames.toArray(new String[0]);
+    }
+
+    @Override
+    public void preInstantiateSingletons() throws BeansException {
+        beanDefinitionMap.keySet().forEach(this::getBean);
     }
 }

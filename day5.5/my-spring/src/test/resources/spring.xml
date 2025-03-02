@@ -13,7 +13,9 @@
     </bean>
 
     <bean id="cat" class="site.xzq_xu.test.ioc.bean.Cat">
-        <property name="name" value="porsche"/>
+        <property name="name" value="a normal cat"/>
+        <property name="age" value="3"/>
+
     </bean>
 
 </beans>

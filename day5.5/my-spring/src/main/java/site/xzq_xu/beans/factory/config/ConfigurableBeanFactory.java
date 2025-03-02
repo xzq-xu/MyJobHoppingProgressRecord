@@ -7,4 +7,11 @@ import site.xzq_xu.beans.factory.HierarchicalBeanFactory;
  */
 public interface ConfigurableBeanFactory extends HierarchicalBeanFactory,SingletonBeanRegistry {
     // 可配置的Bean工厂接口，继承自HierarchicalBeanFactory和SingletonBeanRegistry接口
+
+    /**
+     * 添加 BeanPostProcessor
+     * @param beanPostProcessor
+     */
+    void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
+
 }

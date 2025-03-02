@@ -1,4 +1,4 @@
-package site.xzq_xu.beans.factory;
+package site.xzq_xu.beans;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

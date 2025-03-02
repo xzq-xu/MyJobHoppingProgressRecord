@@ -3,15 +3,11 @@ package site.xzq_xu.beans.factory.json;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.XmlUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import site.xzq_xu.beans.BeansException;
-import site.xzq_xu.beans.factory.PropertyValue;
+import site.xzq_xu.beans.PropertyValue;
 import site.xzq_xu.beans.factory.config.BeanDefinition;
 import site.xzq_xu.beans.factory.config.BeanReference;
 import site.xzq_xu.beans.factory.support.AbstractBeanDefinitionReader;
@@ -20,7 +16,6 @@ import site.xzq_xu.core.io.Resource;
 import site.xzq_xu.core.io.ResourceLoader;
 
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
