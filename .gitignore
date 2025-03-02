@@ -11,3 +11,4 @@ target/
 .mvn
 mvnw
 mvnw.*
+.DS_Store
