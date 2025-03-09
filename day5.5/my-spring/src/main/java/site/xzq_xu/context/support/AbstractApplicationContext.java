@@ -4,10 +4,17 @@ import site.xzq_xu.beans.BeansException;
 import site.xzq_xu.beans.factory.ConfigurableListableBeanFactory;
 import site.xzq_xu.beans.factory.config.BeanFactoryPostProcessor;
 import site.xzq_xu.beans.factory.config.BeanPostProcessor;
+import site.xzq_xu.context.ApplicationEvent;
+import site.xzq_xu.context.ApplicationListener;
 import site.xzq_xu.context.ConfigurableApplicationContext;
+import site.xzq_xu.context.event.ApplicationEventMulticaster;
+import site.xzq_xu.context.event.ContextClosedEvent;
+import site.xzq_xu.context.event.ContextRefreshedEvent;
+import site.xzq_xu.context.event.SimpleApplicationEventMulticaster;
 import site.xzq_xu.core.io.DefaultResourceLoader;
 import site.xzq_xu.core.io.Resource;
 
+import java.util.Collection;
 import java.util.Map;
 
 
@@ -15,6 +22,12 @@ import java.util.Map;
  * 抽象应用程序上下文
  */
 public abstract class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext {
+
+    public static final String APPLICATION_EVENT_MULTICASTER_BEAN_NAME = "applicationEventMulticaster";
+    private ApplicationEventMulticaster applicationEventMulticaster;
+
+
+
     /**
      *重写父类的方法 // 刷新容器
       */
@@ -35,10 +48,21 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         //3. 注册BeanPostProcessor
         registerBeanPostProcessors(beanFactory);
 
+        //初始化事件发布者
+        initApplicationEventMulticaster();
+        //注册事件监听器
+        registerListeners();
+
         //提前实例化单例bean
         beanFactory.preInstantiateSingletons();
 
+        //发布容器刷新完成事件
+        finishRefresh();
     }
+
+
+
+
 
     /**
      * 注册BeanPostProcessor
@@ -123,6 +147,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     // 关闭方法
     protected void doClose() {
+        //发布容器关闭事件
+        publishEvent(new ContextClosedEvent(this));
         // 销毁bean
         destroyBeans();
     }
@@ -140,5 +166,37 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         Thread shutdownHook = new Thread(this::doClose);
         // 将线程添加到JVM的关闭钩子中
         Runtime.getRuntime().addShutdownHook(shutdownHook);
+    }
+
+
+    /**
+     * 初始化事件发布者
+     */
+    protected void initApplicationEventMulticaster() {
+        ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+        applicationEventMulticaster = new SimpleApplicationEventMulticaster(beanFactory);
+        beanFactory.addSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, applicationEventMulticaster);
+    }
+
+    /**
+     * 注册事件监听器
+     */
+    protected void registerListeners() {
+        Collection<ApplicationListener> applicationListeners = getBeansOfType(ApplicationListener.class).values();
+        for (ApplicationListener applicationListener : applicationListeners) {
+            applicationEventMulticaster.addApplicationListener(applicationListener);
+        }
+    }
+
+    /**
+     * 发布容器刷新完成事件
+     */
+    protected void finishRefresh() {
+        publishEvent(new ContextRefreshedEvent(this));
+    }
+
+    @Override
+    public void publishEvent(ApplicationEvent event) {
+        applicationEventMulticaster.multicastEvent(event);
     }
 }

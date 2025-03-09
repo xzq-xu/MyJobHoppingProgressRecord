@@ -26,8 +26,8 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
         return stringObjects.get(beanName);
     }
 
-
-    protected  void  addSingleton(String beanName,Object bean){
+    @Override
+    public   void  addSingleton(String beanName,Object bean){
         // 将beanName和bean放入stringObjectMap中
         stringObjects.put(beanName,bean);
     }

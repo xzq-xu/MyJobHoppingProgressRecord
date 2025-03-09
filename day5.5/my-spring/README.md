@@ -330,3 +330,22 @@ FactoryBean是Spring提供的一种工厂Bean，用于创建复杂对象。
 
 
 
+
+
+## 容器事件 和 事件监听器
+
+> 分支名：event-and-event-listener
+
+ApplicationContext支持事件机制，通过ApplicationEvent发布事件，通过ApplicationListener监听事件。
+ApplicationEventMulticaster接口是注册监听器和发布事件的抽象接口，AbstractApplicationContext实现了该接口，
+通过ApplicationEventMulticaster#multicastEvent方法发布事件，通过AbstractApplicationContext#addApplicationListener方法注册监听器。
+
+在refresh中 会实例化ApplicationEventMulticaster、注册监听器并发布容器刷新事件ContextRefreshedEvent；
+在doClose方法中，发布容器关闭事件ContextClosedEvent。
+
+
+[测试代码](src/test/java/site/xzq_xu/test/ioc/EventAndEventListenerTest.java)
+
+
+
+
