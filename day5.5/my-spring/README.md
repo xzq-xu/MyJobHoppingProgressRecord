@@ -316,3 +316,17 @@ graph TD
 
 
 
+## FactoryBean 
+
+> 分支名：factory-bean
+
+FactoryBean是Spring提供的一种工厂Bean，用于创建复杂对象。
+他是一种特殊的Bean，当向容器获取该bean时，容器返回的不是其本身，而是返回FactoryBean#getObject方法的返回值，可以通过编程定义复杂的Bean。
+实现逻辑： 当容器发现Bean为FactoryBean时，调用其getObject方法返回最终Bean。当FactoryBean#isSingleton == true 时，将最终Bean放入
+缓存中，否则每次获取该bean时都会调用FactoryBean#getObject方法返回一个新的实例。
+
+
+[测试代码](src/test/java/site/xzq_xu/test/ioc/FactoryBeanTest.java)
+
+
+

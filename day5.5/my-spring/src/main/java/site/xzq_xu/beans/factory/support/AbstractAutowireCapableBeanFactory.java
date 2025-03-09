@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
  */
 @Setter
 @Getter
-public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFactory
+public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory
                                         implements AutowireCapableBeanFactory {
 
 
