@@ -88,7 +88,13 @@ public class JsonBeanDefinitionReader extends AbstractBeanDefinitionReader {
             String id = bean.getStr(ID_ATTRIBUTE);
             String name = bean.getStr(NAME_ATTRIBUTE);
             String className = bean.getStr(CLASS_ATTRIBUTE);
-            //创建BeanDefinition对象
+
+            //获取init-method 、 destroy-method
+            String initMethodName = bean.getStr(INIT_METHOD_ATTRIBUTE);
+            String destroyMethodName = bean.getStr(DESTROY_METHOD_ATTRIBUTE);
+            //获取scope
+            String scope = bean.getStr(SCOPE_ATTRIBUTE);
+
 
             // 创建BeanDefinition对象
             Class<?> clazz = null;
@@ -105,6 +111,17 @@ public class JsonBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 beanName = StrUtil.lowerFirst(clazz.getSimpleName());
             }
             BeanDefinition beanDefinition = new BeanDefinition(clazz);
+
+            //设置init-method、destroy-method
+            beanDefinition.setInitMethodName(initMethodName);
+            beanDefinition.setDestroyMethodName(destroyMethodName);
+            //设置scope
+            if (StrUtil.isNotEmpty(scope)) {
+                beanDefinition.setScope(scope);
+            }
+
+
+
 
             // 获取bean的属性
             JSONArray properties = bean.getJSONArray(PROPERTY_ELEMENT);

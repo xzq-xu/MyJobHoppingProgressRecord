@@ -214,10 +214,137 @@ ApplicationContext层次图
 
 
 
+## bean的初始化和销毁方法
+
+> 分支名：init-and-destroy-method
+
+spring 提供了三种bean的初始化和销毁方法：
+- xml配置文件中，通过`init-method`和`destroy-method`指定
+- 通过实现`InitializingBean`接口，重写`afterPropertiesSet`方法， 实现`DisposableBean`接口，重写`destroy`方法
+- 在方法上加`@PostConstruct`、`@PreDestrory` 注解
+
+第三种方式通过BeanPostProcessor实现，本节先忽略
+
+针对第一种方法，在BeanDefinition中增加属性initMethodName和destroyMethodName
+初始化方法在AbstractAutowireCapableBeanFactory#invokeInitMethods中执行。 
+DefaultSingleTonBeanRegistry 中 增加属性 disposableBeans 保存 拥有销毁方法的Bean， 拥有销毁方法的Bean 在 AbstractAutowireCapableBeanFactory#registerDisposableBeanIfNecessary
+注册到disposableBeans；
+为了确保销毁方法在虚拟机关闭之前执行，需要向虚拟机注册一个钩子方法，查看AbstractApplicationContext#registerShutdownHook方法。
+也可以调用ApplicationContext的close方法关闭容器
+
+```mermaid
+graph TD
+    A[配置文件（xml、json或者其他）] --> B[读取为BeanDefinition] --> C[BeanFactoryPostProcessor 修改BeanDefinition]
+    --> D[Bean的实例化] --> E[BeanPostProcessor 前置处理]  --> F[Bean的初始化 - 执行Bean的初始化方法]
+    --> G[BeanPostProcessor 后置处理] --> H[Bean的使用] --> I[Bean的销毁 - 执行Bean的销毁方法]
+    
+    F --> A1[InitializingBean#afterPropertiesSet] --> A2[自定义初始化方法 init-method] -.-> F
+    I --> A3[DisposableBean#destroy] --> A4[自定义销毁方法 destroy-method]  -.-> I
+```
+
+[测试代码](src/test/java/site/xzq_xu/test/ioc/InitAndDestroyMethodTest.java)
 
 
 
 
+
+
+
+## Aware接口
+
+> 分支名：aware-interface
+
+Aware接口是Spring 提供的一系列感知接口，让其实现类能够感知容器相关的对象。
+常用的Aware接口有：
+- BeanFactoryAware：让bean感知到所属的BeanFactory
+- ApplicationContextAware：让bean感知到所属的ApplicationContext
+
+关注 AbstractAutowireCapableBeanFactory#initializeBean 方法
+
+实现ApplicationContextAware接口 感知ApplicationContext， 是通过BeanPostProcessor。 由Bean的生命周期可知，Bean实例化后会经过
+BeanPostProcessor的前置处理，后置处理。 定义一个BeanPostProcessor的实现类 ApplicationContextAwareProcessor，在AbstractApplicationContext#refresh方法中注册到BeanFactory中。
+在前置处理中调用实现类的setApplicationContext方法，将ApplicationContext对象传递给实现类。
+
+修改xml Resource Loader 为 dom4j实现
+
+Bean得生命周期
+```mermaid
+graph TD
+    A[配置文件（xml、json或者其他）] --> B[读取为BeanDefinition] --> C[BeanFactoryPostProcessor 修改BeanDefinition]
+    --> D[Bean的实例化] --> E[BeanPostProcessor 前置处理]  --> F[Bean的初始化 - 执行Bean的初始化方法]
+    --> G[BeanPostProcessor 后置处理] --> H[Bean的使用] --> I[Bean的销毁 - 执行Bean的销毁方法]
+    
+    F --> A1[InitializingBean#afterPropertiesSet] --> A2[自定义初始化方法 init-method] -.-> F
+    I --> A3[DisposableBean#destroy] --> A4[自定义销毁方法 destroy-method]  -.-> I
+    
+    A5[ApplicationContextAware#setApplicationContext] --> E
+    
+```
+[测试代码](src/test/java/site/xzq_xu/test/ioc/AwareInterfaceTest.java)
+
+
+
+
+## Bean的作用用域 ， 添加prototype作用域
+
+> 分支名：prototype-bean
+
+prototype Bean。原型bean，每次获取该类型bean的时候容器都会创建一个新的实例。
+在BeanDefinition中增加 scope属性，当scope值为 prototype时，每次获取该bean的时候都会创建一个新的实例。
+不再加入到singletonObjects， 同时prototype对象不执行销毁方法，注意AbstractAutowireCapableBeanFactory#registerDisposableBeanIfNecessary方法
+
+bean的生命周期
+
+```mermaid
+graph TD
+    A[配置文件（xml、json或者其他）] --> B[读取为BeanDefinition] --> C[BeanFactoryPostProcessor 修改BeanDefinition]
+    --> D[Bean的实例化] --> E[BeanPostProcessor 前置处理]  --> F[Bean的初始化 - 执行Bean的初始化方法]
+    --> G[BeanPostProcessor 后置处理] --> H[Bean的使用] --> 
+    H2{scope} --prototype--> I2
+    H2  --> I
+    I[Bean的销毁 - 执行Bean的销毁方法]  --> I2(结束)
+    
+    F -.-> A1[InitializingBean#afterPropertiesSet] --> A2[自定义初始化方法 init-method] -.-> F
+    I -.-> A3[DisposableBean#destroy] --> A4[自定义销毁方法 destroy-method]  -.-> I
+    
+    A5[ApplicationContextAware#setApplicationContext] --> E
+    
+
+```
+
+[测试代码](src/test/java/site/xzq_xu/test/ioc/ScopePrototypeTest.java)
+
+
+
+## FactoryBean 
+
+> 分支名：factory-bean
+
+FactoryBean是Spring提供的一种工厂Bean，用于创建复杂对象。
+他是一种特殊的Bean，当向容器获取该bean时，容器返回的不是其本身，而是返回FactoryBean#getObject方法的返回值，可以通过编程定义复杂的Bean。
+实现逻辑： 当容器发现Bean为FactoryBean时，调用其getObject方法返回最终Bean。当FactoryBean#isSingleton == true 时，将最终Bean放入
+缓存中，否则每次获取该bean时都会调用FactoryBean#getObject方法返回一个新的实例。
+
+
+[测试代码](src/test/java/site/xzq_xu/test/ioc/FactoryBeanTest.java)
+
+
+
+
+
+## 容器事件 和 事件监听器
+
+> 分支名：event-and-event-listener
+
+ApplicationContext支持事件机制，通过ApplicationEvent发布事件，通过ApplicationListener监听事件。
+ApplicationEventMulticaster接口是注册监听器和发布事件的抽象接口，AbstractApplicationContext实现了该接口，
+通过ApplicationEventMulticaster#multicastEvent方法发布事件，通过AbstractApplicationContext#addApplicationListener方法注册监听器。
+
+在refresh中 会实例化ApplicationEventMulticaster、注册监听器并发布容器刷新事件ContextRefreshedEvent；
+在doClose方法中，发布容器关闭事件ContextClosedEvent。
+
+
+[测试代码](src/test/java/site/xzq_xu/test/ioc/EventAndEventListenerTest.java)
 
 
 

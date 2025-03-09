@@ -7,7 +7,7 @@
 		 http://www.springframework.org/schema/context
 		 http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-    <bean id="person" class="site.xzq_xu.test.ioc.bean.Person">
+    <bean id="person" class="site.xzq_xu.test.ioc.bean.Person" init-method="init" destroy-method="destroy"  lazy-init="true">
         <property name="name" value="李四"/>
         <property name="cat" ref="cat"/>
     </bean>
@@ -15,10 +15,7 @@
     <bean id="cat" class="site.xzq_xu.test.ioc.bean.Cat">
         <property name="name" value="Jerry"/>
         <property name="age" value="3"/>
+
     </bean>
-
-    <bean id="awareTestService" class="site.xzq_xu.test.ioc.service.AwareTestService"/>
-    <bean id="awareTestService2" class="site.xzq_xu.test.ioc.service.AwareTestService" scope="prototype" />
-
 
 </beans>
