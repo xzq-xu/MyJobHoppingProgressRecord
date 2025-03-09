@@ -12,9 +12,34 @@ import site.xzq_xu.beans.PropertyValues;
 @Getter
 @Setter
 public class BeanDefinition {
+
+    public static final String SCOPE_SINGLETON = "singleton";
+    public static final String SCOPE_PROTOTYPE = "prototype";
+
+
     private Class beanClass;
 
     private PropertyValues propertyValues;
+
+    private String initMethodName;
+
+    private String destroyMethodName;
+
+    private String scope = SCOPE_SINGLETON;
+
+    private boolean singleton = true;
+    private boolean prototype = false;
+
+    public void  setScope(String scope){
+        this.scope = scope;
+        this.singleton = SCOPE_SINGLETON.equals(scope);
+        this.prototype = SCOPE_PROTOTYPE.equals(scope);
+    }
+
+
+
+
+
 
     public BeanDefinition(Class beanClass) {
         this(beanClass,null);

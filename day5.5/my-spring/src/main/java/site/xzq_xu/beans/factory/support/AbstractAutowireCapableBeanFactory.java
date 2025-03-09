@@ -1,21 +1,28 @@
 package site.xzq_xu.beans.factory.support;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 import site.xzq_xu.beans.BeansException;
 import site.xzq_xu.beans.PropertyValue;
+import site.xzq_xu.beans.factory.BeanFactoryAware;
+import site.xzq_xu.beans.factory.DisposableBean;
+import site.xzq_xu.beans.factory.InitializingBean;
 import site.xzq_xu.beans.factory.config.AutowireCapableBeanFactory;
 import site.xzq_xu.beans.factory.config.BeanDefinition;
 import site.xzq_xu.beans.factory.config.BeanPostProcessor;
 import site.xzq_xu.beans.factory.config.BeanReference;
+
+import java.lang.reflect.Method;
 
 /**
  * 实现了自动装配功能的Bean容器
  */
 @Setter
 @Getter
-public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFactory
+public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory
                                         implements AutowireCapableBeanFactory {
 
 
@@ -46,12 +53,33 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFact
             throw new BeansException("实例化失败", e);
         }
 
+        //注册带有销毁方法的Bean
+        registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
+
+
         // 将Bean实例添加到单例池中
-        addSingleton(beanName, bean);
+        //添加作用域 判断
+        if (beanDefinition.isSingleton()) {
+            addSingleton(beanName, bean);
+        }
+
         return bean;
     }
 
-
+    /**
+     *  注册带有销毁的方法bean， 即bean继承自DisposableBean接口或有自定义的销毁方法
+     * @param beanName bean的名称
+     * @param bean bean对象
+     * @param beanDefinition bean的定义
+     */
+    protected void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
+        //判断是否为单例
+        if (beanDefinition.isSingleton()) {
+            if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
+                registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
+            }
+        }
+    }
 
 
     /**
@@ -131,17 +159,30 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFact
 
     /**
      * 初始化bean
-     * @param beanName
-     * @param bean
-     * @param beanDefinition
-     * @return
+     * @param beanName bean名称
+     * @param bean bean对象
+     * @param beanDefinition bean定义
+     * @return 初始化后的bean对象
      */
     protected Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+
+        //执行bean的Aware接口方法
+        if (bean instanceof BeanFactoryAware){
+            ((BeanFactoryAware) bean).setBeanFactory(this);
+        }
+
+
+
         //执行BeanPostProcessor的前置处理
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
 
-        //TODO 后面会在此处执行bean的初始化方法
-        invokeInitMethods(beanName, wrappedBean, beanDefinition);
+        //执行bean的初始化方法
+        try {
+            invokeInitMethods(beanName, wrappedBean, beanDefinition);
+        } catch (Throwable e) {
+            throw new BeansException("Invocation of init method of Bean["+ beanName + "] failed",e);
+        }
+
 
         //执行BeanPostProcessor的后置处理
         wrappedBean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
@@ -151,15 +192,29 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFact
 
     /**
      * 执行bean的初始化方法
-     *
      * @param beanName
      * @param bean
      * @param beanDefinition
      * @throws Throwable
      */
-    protected void invokeInitMethods(String beanName, Object bean, BeanDefinition beanDefinition) {
-        //TODO 后面会实现
-        System.out.println("执行bean[" + beanName + "]的初始化方法");
+    protected void invokeInitMethods(String beanName, Object bean, BeanDefinition beanDefinition) throws Throwable {
+        // 如果bean实现了InitializingBean接口，则调用其afterPropertiesSet方法
+        if (bean instanceof InitializingBean initializingBean){
+            initializingBean.afterPropertiesSet();
+        }
+        // 获取beanDefinition中的initMethodName
+        String initMethodName = beanDefinition.getInitMethodName();
+        //防止自定义的init方法与 InitializingBean.afterPropertiesSet 名字重复导致重复执行两次的问题
+        if (StrUtil.isNotEmpty(initMethodName) && !(bean instanceof InitializingBean && "afterPropertiesSet".equals(initMethodName))){
+            // 获取bean中的initMethod方法
+            Method initMethod = ClassUtil.getPublicMethod(bean.getClass(), initMethodName);
+            // 如果找不到initMethod方法，则抛出异常
+            if (initMethod == null){
+                throw new BeansException("Could not find an init method named '" + initMethodName + "' on bean with name '" + beanName + "'");
+            }
+            // 调用initMethod方法
+            initMethod.invoke(bean);
+        }
     }
 
 }
