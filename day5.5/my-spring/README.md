@@ -214,7 +214,37 @@ ApplicationContext层次图
 
 
 
+# bean的初始化和销毁方法
 
+> 分支名：init-and-destroy-method
+
+spring 提供了三种bean的初始化和销毁方法：
+- xml配置文件中，通过`init-method`和`destroy-method`指定
+- 通过实现`InitializingBean`接口，重写`afterPropertiesSet`方法， 实现`DisposableBean`接口，重写`destroy`方法
+- 在方法上加`@PostConstruct`、`@PreDestrory` 注解
+
+第三种方式通过BeanPostProcessor实现，本节先忽略
+
+针对第一种方法，在BeanDefinition中增加属性initMethodName和destroyMethodName
+初始化方法在AbstractAutowireCapableBeanFactory#invokeInitMethods中执行。 
+DefaultSingleTonBeanRegistry 中 增加属性 disposableBeans 保存 拥有销毁方法的Bean， 拥有销毁方法的Bean 在 AbstractAutowireCapableBeanFactory#registerDisposableBeanIfNecessary
+注册到disposableBeans；
+为了确保销毁方法在虚拟机关闭之前执行，需要向虚拟机注册一个钩子方法，查看AbstractApplicationContext#registerShutdownHook方法。
+也可以调用ApplicationContext的close方法关闭容器
+
+```mermaid
+graph TD
+    A[配置文件（xml、json或者其他）] --> B[读取为BeanDefinition] --> C[BeanFactoryPostProcessor 修改BeanDefinition]
+    --> D[Bean的实例化] --> E[BeanPostProcessor 前置处理]  --> F[Bean的初始化 - 执行Bean的初始化方法]
+    --> G[BeanPostProcessor 后置处理] --> H[Bean的使用] --> I[Bean的销毁 - 执行Bean的销毁方法]
+    
+    F --> A1[InitializingBean#afterPropertiesSet] --> A2[自定义初始化方法 init-method] -.-> F
+    I --> A3[DisposableBean#destroy] --> A4[自定义销毁方法 destroy-method]  -.-> I
+
+
+```
+
+[测试代码](src/test/java/site/xzq_xu/test/ioc/InitAndDestroyMethodTest.java)
 
 
 

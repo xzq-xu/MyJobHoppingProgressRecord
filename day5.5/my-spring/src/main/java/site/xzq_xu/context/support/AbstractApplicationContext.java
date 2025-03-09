@@ -109,4 +109,32 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         return getBeanFactory().getBeanDefinitionNames();
     }
 
+
+    @Override
+    // 重写close()方法
+    public void close() {
+        // 调用doClose()方法
+        doClose();
+    }
+
+    // 关闭方法
+    protected void doClose() {
+        // 销毁bean
+        destroyBeans();
+    }
+
+    // 销毁bean
+    protected void destroyBeans() {
+        // 调用bean工厂的销毁单例方法
+        getBeanFactory().destroySingletons();
+    }
+
+    @Override
+    // 重写registerShutdownHook方法
+    public void registerShutdownHook() {
+        // 创建一个线程，线程执行doClose方法
+        Thread shutdownHook = new Thread(this::doClose);
+        // 将线程添加到JVM的关闭钩子中
+        Runtime.getRuntime().addShutdownHook(shutdownHook);
+    }
 }

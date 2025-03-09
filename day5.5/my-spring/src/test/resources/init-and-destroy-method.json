@@ -1,0 +1,38 @@
+{
+  "beans": [
+    {
+      "id":"cat",
+      "class":"site.xzq_xu.test.ioc.bean.Cat",
+      "property":[
+        {
+          "name":"name",
+          "value":"Tom"
+        },
+        {
+          "name":"age",
+          "value":3
+        }
+      ]
+    },
+    {
+      "id":"person",
+      "class":"site.xzq_xu.test.ioc.bean.Person",
+      "init-method":"init",
+      "destroy-method":"destroy",
+      "property":[
+        {
+          "name":"name",
+          "value":"张三"
+        },
+        {
+          "name":"cat",
+          "ref":"cat"
+        },
+        {
+          "name":"age",
+          "value":18
+        }
+      ]
+    }
+  ]
+}
