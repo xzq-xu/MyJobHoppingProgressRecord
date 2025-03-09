@@ -214,7 +214,7 @@ ApplicationContext层次图
 
 
 
-# bean的初始化和销毁方法
+## bean的初始化和销毁方法
 
 > 分支名：init-and-destroy-method
 
@@ -245,6 +245,8 @@ graph TD
 ```
 
 [测试代码](src/test/java/site/xzq_xu/test/ioc/InitAndDestroyMethodTest.java)
+
+
 
 
 
