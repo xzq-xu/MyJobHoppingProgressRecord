@@ -285,6 +285,34 @@ graph TD
 
 
 
+## Bean的作用用域 ， 添加prototype作用域
+
+> 分支名：prototype-bean
+
+prototype Bean。原型bean，每次获取该类型bean的时候容器都会创建一个新的实例。
+在BeanDefinition中增加 scope属性，当scope值为 prototype时，每次获取该bean的时候都会创建一个新的实例。
+不再加入到singletonObjects， 同时prototype对象不执行销毁方法，注意AbstractAutowireCapableBeanFactory#registerDisposableBeanIfNecessary方法
+
+bean的生命周期
+
+```mermaid
+graph TD
+    A[配置文件（xml、json或者其他）] --> B[读取为BeanDefinition] --> C[BeanFactoryPostProcessor 修改BeanDefinition]
+    --> D[Bean的实例化] --> E[BeanPostProcessor 前置处理]  --> F[Bean的初始化 - 执行Bean的初始化方法]
+    --> G[BeanPostProcessor 后置处理] --> H[Bean的使用] --> 
+    H2{scope} --prototype--> I2
+    H2  --> I
+    I[Bean的销毁 - 执行Bean的销毁方法]  --> I2(结束)
+    
+    F -.-> A1[InitializingBean#afterPropertiesSet] --> A2[自定义初始化方法 init-method] -.-> F
+    I -.-> A3[DisposableBean#destroy] --> A4[自定义销毁方法 destroy-method]  -.-> I
+    
+    A5[ApplicationContextAware#setApplicationContext] --> E
+    
+
+```
+
+[测试代码](src/test/java/site/xzq_xu/test/ioc/ScopePrototypeTest.java)
 
 
 

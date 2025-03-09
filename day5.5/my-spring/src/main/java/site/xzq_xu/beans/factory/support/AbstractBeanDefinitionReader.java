@@ -22,6 +22,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
     public static final String REF_ATTRIBUTE = "ref";
     public static final String INIT_METHOD_ATTRIBUTE = "init-method";
     public static final String DESTROY_METHOD_ATTRIBUTE = "destroy-method";
+    public static final String SCOPE_ATTRIBUTE = "scope";
 
 
 

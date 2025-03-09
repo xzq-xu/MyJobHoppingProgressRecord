@@ -18,6 +18,7 @@
     </bean>
 
     <bean id="awareTestService" class="site.xzq_xu.test.ioc.service.AwareTestService"/>
+    <bean id="awareTestService2" class="site.xzq_xu.test.ioc.service.AwareTestService" scope="prototype" />
 
 
 </beans>
