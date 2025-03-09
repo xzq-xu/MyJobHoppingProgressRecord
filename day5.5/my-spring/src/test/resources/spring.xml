@@ -15,7 +15,9 @@
     <bean id="cat" class="site.xzq_xu.test.ioc.bean.Cat">
         <property name="name" value="Jerry"/>
         <property name="age" value="3"/>
-
     </bean>
+
+    <bean id="awareTestService" class="site.xzq_xu.test.ioc.service.AwareTestService"/>
+
 
 </beans>

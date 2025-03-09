@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import site.xzq_xu.beans.BeansException;
 import site.xzq_xu.beans.PropertyValue;
+import site.xzq_xu.beans.factory.BeanFactoryAware;
 import site.xzq_xu.beans.factory.DisposableBean;
 import site.xzq_xu.beans.factory.InitializingBean;
 import site.xzq_xu.beans.factory.config.AutowireCapableBeanFactory;
@@ -151,12 +152,20 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstactBeanFact
 
     /**
      * 初始化bean
-     * @param beanName
-     * @param bean
-     * @param beanDefinition
-     * @return
+     * @param beanName bean名称
+     * @param bean bean对象
+     * @param beanDefinition bean定义
+     * @return 初始化后的bean对象
      */
     protected Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+
+        //执行bean的Aware接口方法
+        if (bean instanceof BeanFactoryAware){
+            ((BeanFactoryAware) bean).setBeanFactory(this);
+        }
+
+
+
         //执行BeanPostProcessor的前置处理
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
 

@@ -240,13 +240,47 @@ graph TD
     
     F --> A1[InitializingBean#afterPropertiesSet] --> A2[自定义初始化方法 init-method] -.-> F
     I --> A3[DisposableBean#destroy] --> A4[自定义销毁方法 destroy-method]  -.-> I
-
-
 ```
 
 [测试代码](src/test/java/site/xzq_xu/test/ioc/InitAndDestroyMethodTest.java)
 
 
+
+
+
+
+
+## Aware接口
+
+> 分支名：aware-interface
+
+Aware接口是Spring 提供的一系列感知接口，让其实现类能够感知容器相关的对象。
+常用的Aware接口有：
+- BeanFactoryAware：让bean感知到所属的BeanFactory
+- ApplicationContextAware：让bean感知到所属的ApplicationContext
+
+关注 AbstractAutowireCapableBeanFactory#initializeBean 方法
+
+实现ApplicationContextAware接口 感知ApplicationContext， 是通过BeanPostProcessor。 由Bean的生命周期可知，Bean实例化后会经过
+BeanPostProcessor的前置处理，后置处理。 定义一个BeanPostProcessor的实现类 ApplicationContextAwareProcessor，在AbstractApplicationContext#refresh方法中注册到BeanFactory中。
+在前置处理中调用实现类的setApplicationContext方法，将ApplicationContext对象传递给实现类。
+
+修改xml Resource Loader 为 dom4j实现
+
+Bean得生命周期
+```mermaid
+graph TD
+    A[配置文件（xml、json或者其他）] --> B[读取为BeanDefinition] --> C[BeanFactoryPostProcessor 修改BeanDefinition]
+    --> D[Bean的实例化] --> E[BeanPostProcessor 前置处理]  --> F[Bean的初始化 - 执行Bean的初始化方法]
+    --> G[BeanPostProcessor 后置处理] --> H[Bean的使用] --> I[Bean的销毁 - 执行Bean的销毁方法]
+    
+    F --> A1[InitializingBean#afterPropertiesSet] --> A2[自定义初始化方法 init-method] -.-> F
+    I --> A3[DisposableBean#destroy] --> A4[自定义销毁方法 destroy-method]  -.-> I
+    
+    A5[ApplicationContextAware#setApplicationContext] --> E
+    
+```
+[测试代码](src/test/java/site/xzq_xu/test/ioc/AwareInterfaceTest.java)
 
 
 
