@@ -63,6 +63,18 @@ content:
 ```
 
 
+其中 system prompt作为 system角色的输入，user prompt作为user 角色的输入
+当然也可以整合成为一条，将system prompt 和 user prompt结合，在一个prompt中设定输入输出格式要求，遵循何种规范等
+
+
+## 高级RAG
+
+高级RAG实际是在基础RAG上的增强，对基础RAG的各个步骤进行增强，从而提升总体性能
+
+
+
+
+
 
 
 
